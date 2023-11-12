@@ -1,6 +1,10 @@
 #ifndef Included_zip_entry_h
 #define Included_zip_entry_h
 
+#define ZIP_LOCAL_LEN 30u
+#define ZIP_CENTRAL_LEN 46u
+#define ZIP_END_LEN 22u
+
 struct zip_entry_local_core
 {
     short unsigned version, bitflag, method;
@@ -44,6 +48,7 @@ void zip_serialize_local(void *restrict dest, const struct zip_entry_local *rest
 void zip_serialize_central(void *restrict dest, const struct zip_entry_central *restrict src);
 void zip_serialize_end(void *restrict dest, const struct zip_entry_end *restrict src);
 void zip_serialize_local_core(void *restrict dest, const struct zip_entry_local_core *restrict src);
+
 void zip_deserialize_local(struct zip_entry_local *restrict dest, const void *restrict src);
 void zip_deserialize_central(struct zip_entry_central *restrict dest, const void *restrict src);
 void zip_deserialize_end(struct zip_entry_end *restrict dest, const void *restrict src);
