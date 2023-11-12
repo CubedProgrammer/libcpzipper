@@ -1,5 +1,6 @@
 #ifndef Included_zip_h
 #define Included_zip_h
+#include"zip_display.h"
 #include"zip_io.h"
 
 void zip_free_local(struct zip_entry_local *en);
