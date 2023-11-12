@@ -14,22 +14,22 @@ int zip_get_str(FILE *fh, char *str, short unsigned len)
 
 int zip_read_local(FILE *fh, struct zip_entry_local *en)
 {
-    char buf[ZIP_LOCAL_LEN];
-    int succ = fread(buf, 1, sizeof(buf), fh) < sizeof(buf) || zip_read_local_str(fh, en);
+    char buf[ZIP_LOCAL_LEN] = "PK\003\004";
+    int succ = fread(buf + 4, 1, sizeof(buf) - 4, fh) < sizeof(buf) || zip_read_local_str(fh, en);
     zip_deserialize_local(en, buf);
     return succ;
 }
 int zip_read_central(FILE *fh, struct zip_entry_central *en)
 {
-    char buf[ZIP_CENTRAL_LEN];
-    int succ = fread(buf, 1, sizeof(buf), fh) < sizeof(buf) || zip_read_central_str(fh, en);
+    char buf[ZIP_CENTRAL_LEN] = "PK\001\002";
+    int succ = fread(buf + 4, 1, sizeof(buf) - 4, fh) < sizeof(buf) || zip_read_central_str(fh, en);
     zip_deserialize_central(en, buf);
     return succ;
 }
 int zip_read_end(FILE *fh, struct zip_entry_end *en)
 {
-    char buf[ZIP_END_LEN];
-    int succ = fread(buf, 1, sizeof(buf), fh) < sizeof(buf) || zip_read_end_str(fh, en);
+    char buf[ZIP_END_LEN] = "PK\005\006";
+    int succ = fread(buf + 4, 1, sizeof(buf) - 4, fh) < sizeof(buf) || zip_read_end_str(fh, en);
     zip_deserialize_end(en, buf);
     return succ;
 }
