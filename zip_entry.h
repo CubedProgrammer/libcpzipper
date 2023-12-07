@@ -54,4 +54,8 @@ void zip_deserialize_central(struct zip_entry_central *restrict dest, const void
 void zip_deserialize_end(struct zip_entry_end *restrict dest, const void *restrict src);
 void zip_deserialize_local_core(struct zip_entry_local_core *restrict dest, const void *restrict src);
 
+void zip_deserialize_local_nosig(struct zip_entry_local *restrict dest, const void *restrict src);
+void zip_deserialize_central_nosig(struct zip_entry_central *restrict dest, const void *restrict src);
+void zip_deserialize_end_nosig(struct zip_entry_end *restrict dest, const void *restrict src);
+
 #endif

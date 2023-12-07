@@ -99,29 +99,17 @@ void zip_serialize_local_core(void *restrict dest, const struct zip_entry_local_
 void zip_deserialize_local(struct zip_entry_local *restrict dest, const void *restrict src)
 {
     dest->sig = zip_little_endian_get(src, 0, 4);
-    zip_deserialize_local_core(&dest->dat, (const char*)src + 4);
+    zip_deserialize_local_nosig(dest, (const char*)src + 4);
 }
 void zip_deserialize_central(struct zip_entry_central *restrict dest, const void *restrict src)
 {
     dest->sig = zip_little_endian_get(src, 0, 4);
-    dest->vermade = zip_little_endian_get(src, 4, 2);
-    zip_deserialize_local_core(&dest->local, (const char*)src + 6);
-    dest->commentlen = zip_little_endian_get(src, 32, 2);
-    dest->disknum = zip_little_endian_get(src, 34, 2);
-    dest->internal = zip_little_endian_get(src, 36, 2);
-    dest->external = zip_little_endian_get(src, 38, 4);
-    dest->fileoff = zip_little_endian_get(src, 42, 4);
+    zip_deserialize_central_nosig(dest, (const char*)src + 4);
 }
 void zip_deserialize_end(struct zip_entry_end *restrict dest, const void *restrict src)
 {
     dest->sig = zip_little_endian_get(src, 0, 4);
-    dest->disk = zip_little_endian_get(src, 4, 2);
-    dest->diskcentral = zip_little_endian_get(src, 6, 2);
-    dest->disktot = zip_little_endian_get(src, 8, 2);
-    dest->tot = zip_little_endian_get(src, 10, 2);
-    dest->cendiroff = zip_little_endian_get(src, 12, 4);
-    dest->cendirlen = zip_little_endian_get(src, 16, 4);
-    dest->commentlen = zip_little_endian_get(src, 20, 2);
+    zip_deserialize_end_nosig(dest, (const char*)src + 4);
 }
 void zip_deserialize_local_core(struct zip_entry_local_core *restrict dest, const void *restrict src)
 {
@@ -135,4 +123,28 @@ void zip_deserialize_local_core(struct zip_entry_local_core *restrict dest, cons
     dest->inflatedsz = zip_little_endian_get(src, 18, 2);
     dest->namelen = zip_little_endian_get(src, 22, 2);
     dest->fieldlen = zip_little_endian_get(src, 24, 2);
+}
+void zip_deserialize_local_nosig(struct zip_entry_local *restrict dest, const void *restrict src)
+{
+    zip_deserialize_local_core(&dest->dat, src);
+}
+void zip_deserialize_central_nosig(struct zip_entry_central *restrict dest, const void *restrict src)
+{
+    dest->vermade = zip_little_endian_get(src, 0, 2);
+    zip_deserialize_local_core(&dest->local, (const char*)src + 2);
+    dest->commentlen = zip_little_endian_get(src, 28, 2);
+    dest->disknum = zip_little_endian_get(src, 30, 2);
+    dest->internal = zip_little_endian_get(src, 32, 2);
+    dest->external = zip_little_endian_get(src, 34, 4);
+    dest->fileoff = zip_little_endian_get(src, 38, 4);
+}
+void zip_deserialize_end_nosig(struct zip_entry_end *restrict dest, const void *restrict src)
+{
+    dest->disk = zip_little_endian_get(src, 0, 2);
+    dest->diskcentral = zip_little_endian_get(src, 2, 2);
+    dest->disktot = zip_little_endian_get(src, 4, 2);
+    dest->tot = zip_little_endian_get(src, 6, 2);
+    dest->cendiroff = zip_little_endian_get(src, 8, 4);
+    dest->cendirlen = zip_little_endian_get(src, 12, 4);
+    dest->commentlen = zip_little_endian_get(src, 16, 2);
 }
