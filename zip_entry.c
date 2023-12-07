@@ -148,3 +148,19 @@ void zip_deserialize_end_nosig(struct zip_entry_end *restrict dest, const void *
     dest->cendirlen = zip_little_endian_get(src, 12, 4);
     dest->commentlen = zip_little_endian_get(src, 16, 2);
 }
+void zip_deserialize(union zip_entry_generic *restrict dest, const void *restrict src)
+{
+    dest->sig = zip_little_endian_get(src, 0, 4);
+    switch(dest->sig)
+    {
+        case ZIP_LOCAL_SIG:
+            zip_deserialize_local_nosig(&dest->local, (const char*)src + 4);
+            break;
+        case ZIP_CENTRAL_SIG:
+            zip_deserialize_central_nosig(&dest->central, (const char*)src + 4);
+            break;
+        case ZIP_END_SIG:
+            zip_deserialize_end_nosig(&dest->end, (const char*)src + 4);
+            break;
+    }
+}
