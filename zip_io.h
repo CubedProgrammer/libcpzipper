@@ -3,6 +3,9 @@
 #include<stdio.h>
 #include"zip_entry.h"
 
+int zip_read(FILE *fh, union zip_entry_generic *en);
+int zip_write(FILE *fh, const union zip_entry_generic *en);
+
 int zip_read_local(FILE *fh, struct zip_entry_local *en);
 int zip_read_central(FILE *fh, struct zip_entry_central *en);
 int zip_read_end(FILE *fh, struct zip_entry_end *en);

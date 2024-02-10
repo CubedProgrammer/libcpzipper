@@ -4,6 +4,7 @@
 #define ZIP_LOCAL_LEN 30u
 #define ZIP_CENTRAL_LEN 46u
 #define ZIP_END_LEN 22u
+#define ZIP_MAX_LEN 46u
 
 #define ZIP_LOCAL_SIG 0x04034b50
 #define ZIP_CENTRAL_SIG 0x02014b50
